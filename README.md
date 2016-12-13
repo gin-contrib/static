@@ -31,27 +31,23 @@ See the [example](example)
 package main
 
 import (
-	"fmt"
-	"time"
+	"github.com/gin-contrib/static"
 
-	"github.com/gin-contrib/cache"
-	"github.com/gin-contrib/cache/persistence"
 	"gopkg.in/gin-gonic/gin.v1"
 )
 
 func main() {
 	r := gin.Default()
 
-	store := persistence.NewInMemoryStore(time.Second)
-	// Cached Page
+	// if Allow DirectoryIndex
+	//r.Use(static.Serve("/", static.LocalFile("/tmp", true)))
+	// set prefix
+	//r.Use(static.Serve("/static", static.LocalFile("/tmp", true)))
+
+	r.Use(static.Serve("/", static.LocalFile("/tmp", false)))
 	r.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong "+fmt.Sprint(time.Now().Unix()))
+		c.String(200, "test")
 	})
-
-	r.GET("/cache_ping", cache.CachePage(store, time.Minute, func(c *gin.Context) {
-		c.String(200, "pong "+fmt.Sprint(time.Now().Unix()))
-	}))
-
 	// Listen and Server in 0.0.0.0:8080
 	r.Run(":8080")
 }
