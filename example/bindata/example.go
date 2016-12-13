@@ -5,8 +5,9 @@ import (
 	"strings"
 
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"github.com/gin-gonic/contrib/static"
-	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/static"
+
+	"gopkg.in/gin-gonic/gin.v1"
 )
 
 type binaryFileSystem struct {

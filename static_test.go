@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/gin-gonic/gin.v1"
 )
 
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
