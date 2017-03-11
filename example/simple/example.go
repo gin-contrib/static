@@ -2,8 +2,7 @@ package main
 
 import (
 	"github.com/gin-contrib/static"
-
-	"gopkg.in/gin-gonic/gin.v1"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
