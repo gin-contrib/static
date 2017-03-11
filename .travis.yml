@@ -9,8 +9,10 @@ go:
 
 install:
   - echo "ignore go get"
+  - go get github.com/campoy/embedmd
 
 script:
+  - embedmd -d *.md
   - go test -v -covermode=atomic -coverprofile=coverage.out
 
 after_success:

@@ -27,6 +27,7 @@ import "github.com/gin-contrib/static"
 
 See the [example](example)
 
+[embedmd]:# (example/simple/example.go go)
 ```go
 package main
 
