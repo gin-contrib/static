@@ -1,15 +1,15 @@
 package static
 
 import (
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path"
 	"path/filepath"
 	"testing"
-
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
 )
 
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
@@ -83,4 +83,51 @@ func TestEmptyDirectory(t *testing.T) {
 	w = performRequest(router2, "GET", "/static/"+filename)
 	assert.Equal(t, w.Code, 200)
 	assert.Equal(t, w.Body.String(), "Gin Web Framework")
+}
+
+func TestIndex(t *testing.T) {
+	// SETUP file
+	testRoot, _ := os.Getwd()
+	f, err := os.Create(path.Join(testRoot, "index.html"))
+	if err != nil {
+		t.Error(err)
+	}
+	defer os.Remove(f.Name())
+	f.WriteString("index")
+	f.Close()
+
+	dir, filename := filepath.Split(f.Name())
+
+	router := gin.New()
+	router.Use(ServeRoot("/", dir))
+
+	w := performRequest(router, "GET", "/"+filename)
+	assert.Equal(t, w.Code, 301)
+
+	w = performRequest(router, "GET", "/")
+	assert.Equal(t, w.Code, 200)
+	assert.Equal(t, w.Body.String(), "index")
+}
+
+func TestListIndex(t *testing.T) {
+	// SETUP file
+	testRoot, _ := os.Getwd()
+	f, err := ioutil.TempFile(testRoot, "")
+	if err != nil {
+		t.Error(err)
+	}
+	defer os.Remove(f.Name())
+	f.WriteString("Gin Web Framework")
+	f.Close()
+
+	dir, filename := filepath.Split(f.Name())
+	router := gin.New()
+	router.Use(Serve("/", LocalFile(dir, true)))
+
+	w := performRequest(router, "GET", "/"+filename)
+	assert.Equal(t, w.Code, 200)
+	assert.Equal(t, w.Body.String(), "Gin Web Framework")
+
+	w = performRequest(router, "GET", "/")
+	assert.Contains(t, w.Body.String(), `<a href="`+filename)
 }

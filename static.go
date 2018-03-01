@@ -1,13 +1,14 @@
 package static
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"path"
 	"strings"
-
-	"github.com/gin-gonic/gin"
 )
+
+const INDEX = "index.html"
 
 type ServeFileSystem interface {
 	http.FileSystem
@@ -35,8 +36,14 @@ func (l *localFileSystem) Exists(prefix string, filepath string) bool {
 		if err != nil {
 			return false
 		}
-		if !l.indexes && stats.IsDir() {
-			return false
+		if stats.IsDir() {
+			if !l.indexes {
+				index := path.Join(name, INDEX)
+				_, err := os.Stat(index)
+				if err != nil {
+					return false
+				}
+			}
 		}
 		return true
 	}
