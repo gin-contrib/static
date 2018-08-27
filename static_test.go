@@ -1,8 +1,6 @@
 package static
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +8,9 @@ import (
 	"path"
 	"path/filepath"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/assert"
 )
 
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {

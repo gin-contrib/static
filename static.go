@@ -1,11 +1,12 @@
 package static
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 const INDEX = "index.html"
