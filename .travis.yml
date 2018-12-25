@@ -10,11 +10,14 @@ go:
   - 1.11.x
   - tip
 
+matrix:
+  fast_finish: true
+  include:
+  - go: 1.11.x
+    env: GO111MODULE=on
+
 install:
-  - echo "ignore go get"
-  - go get -u github.com/kardianos/govendor
   - go get github.com/campoy/embedmd
-  - govendor sync
 
 script:
   - embedmd -d *.md
