@@ -1,6 +1,7 @@
 package static
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path"
@@ -55,16 +56,30 @@ func ServeRoot(urlPrefix, root string) gin.HandlerFunc {
 	return Serve(urlPrefix, LocalFile(root, false))
 }
 
-// Static returns a middleware handler that serves static files in the given directory.
-func Serve(urlPrefix string, fs ServeFileSystem) gin.HandlerFunc {
+// GenericServe returns a middleware handler that serves static files in the given directory.
+func GenericServe(urlPrefix string, fs ServeFileSystem, cacheAge uint) gin.HandlerFunc {
 	fileserver := http.FileServer(fs)
 	if urlPrefix != "" {
 		fileserver = http.StripPrefix(urlPrefix, fileserver)
 	}
 	return func(c *gin.Context) {
 		if fs.Exists(urlPrefix, c.Request.URL.Path) {
+			if cacheAge != 0 {
+				c.Writer.Header().Add("Cache-Control", fmt.Sprintf("max-age=%d", cacheAge))
+			}
 			fileserver.ServeHTTP(c.Writer, c.Request)
 			c.Abort()
 		}
 	}
+}
+
+// Static returns a middleware handler that serves static files in the given directory.
+func Serve(urlPrefix string, fs ServeFileSystem) gin.HandlerFunc {
+	return GenericServe(urlPrefix, fs, 0)
+}
+
+// ServeCached returns a middleware handler that similar as Serve but with the Cache-Control Header set as passed in the cacheAge parameter
+func ServeCached(urlPrefix string, fs ServeFileSystem, cacheAge uint) gin.HandlerFunc {
+	return GenericServe(urlPrefix, fs, cacheAge)
+
 }
