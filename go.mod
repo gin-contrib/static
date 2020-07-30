@@ -1,4 +1,4 @@
-module github.com/gin-contrib/static
+module github.com/ghezzofr/static
 
 require (
 	github.com/elazarl/go-bindata-assetfs v1.0.0
