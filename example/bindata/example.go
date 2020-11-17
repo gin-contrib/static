@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strings"
 
-	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
@@ -28,21 +27,20 @@ func (b *binaryFileSystem) Exists(prefix string, filepath string) bool {
 	return false
 }
 
-func BinaryFileSystem(root string) *binaryFileSystem {
-	fs := &assetfs.AssetFS{Asset, AssetDir, AssetInfo, root}
+func binaryFS(root string) *binaryFileSystem {
 	return &binaryFileSystem{
-		fs,
+		AssetFile(),
 	}
 }
 
 // Usage
-// $ go-bindata data/
+// $ go-bindata -prefix "data" -fs data/
 // $ go build && ./bindata
 //
 func main() {
 	r := gin.Default()
 
-	r.Use(static.Serve("/static", BinaryFileSystem("data")))
+	r.Use(static.Serve("/static", binaryFS("data")))
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(200, "test")
 	})
