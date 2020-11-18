@@ -2,11 +2,11 @@ package static
 
 import (
 	"net/http"
-	"os"
 	"path"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/markbates/pkger"
 )
 
 const INDEX = "index.html"
@@ -24,7 +24,7 @@ type localFileSystem struct {
 
 func LocalFile(root string, indexes bool) *localFileSystem {
 	return &localFileSystem{
-		FileSystem: gin.Dir(root, indexes),
+		FileSystem: pkger.Dir(root),
 		root:       root,
 		indexes:    indexes,
 	}
@@ -33,14 +33,14 @@ func LocalFile(root string, indexes bool) *localFileSystem {
 func (l *localFileSystem) Exists(prefix string, filepath string) bool {
 	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
 		name := path.Join(l.root, p)
-		stats, err := os.Stat(name)
+		stats, err := pkger.Stat(name)
 		if err != nil {
 			return false
 		}
 		if stats.IsDir() {
 			if !l.indexes {
 				index := path.Join(name, INDEX)
-				_, err := os.Stat(index)
+				_, err := pkger.Stat(index)
 				if err != nil {
 					return false
 				}
