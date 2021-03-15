@@ -11,7 +11,7 @@ install:
   - go get github.com/campoy/embedmd
 
 script:
-  - embedmd -d *.md
+  - embedmd -w *.md
   - go test -v -covermode=atomic -coverprofile=coverage.out
 
 after_success:

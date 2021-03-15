@@ -27,9 +27,8 @@ import "github.com/gin-contrib/static"
 
 See the [example](example)
 
-[embedmd]:# (example/simple/example.go go)
-
 #### Serve local file
+[embedmd]:# (example/simple/example.go)
 ```go
 package main
 
@@ -56,6 +55,7 @@ func main() {
 ```
 
 #### Serve embed folder
+[embedmd]:# (example/embed/example.go)
 ```go
 package main
 
@@ -68,16 +68,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//go:embed tmp/server
+//go:embed data
 var server embed.FS
 
 func main() {
 	r := gin.Default()
-	r.Use(static.Serve("/", static.EmbedFolder(server, "tmp/server")))
+	r.Use(static.Serve("/", static.EmbedFolder(server, "data/server")))
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(200, "test")
 	})
-	r.NoRoute(func (c *gin.Context) {
+	r.NoRoute(func(c *gin.Context) {
 		fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
 		c.Redirect(http.StatusMovedPermanently, "/")
 	})
