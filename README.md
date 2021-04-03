@@ -14,7 +14,7 @@ Static middleware
 Download and install it:
 
 ```sh
-$ go get github.com/gin-contrib/static
+go get github.com/gin-contrib/static
 ```
 
 Import it in your code:
@@ -23,11 +23,11 @@ Import it in your code:
 import "github.com/gin-contrib/static"
 ```
 
-### Canonical example:
+### Canonical example
 
 See the [example](example)
 
-[embedmd]:# (example/simple/example.go go)
+[embedmd]:# (_example/simple/example.go go)
 ```go
 package main
 
