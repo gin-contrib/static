@@ -28,7 +28,7 @@ func TestEmptyDirectory(t *testing.T) {
 		t.Error(err)
 	}
 	defer os.Remove(f.Name())
-	f.WriteString("Gin Web Framework")
+	_, _ = f.WriteString("Gin Web Framework")
 	f.Close()
 
 	dir, filename := filepath.Split(f.Name())
@@ -94,7 +94,7 @@ func TestIndex(t *testing.T) {
 		t.Error(err)
 	}
 	defer os.Remove(f.Name())
-	f.WriteString("index")
+	_, _ = f.WriteString("index")
 	f.Close()
 
 	dir, filename := filepath.Split(f.Name())
