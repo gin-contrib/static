@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -18,7 +19,6 @@ func (b *binaryFileSystem) Open(name string) (http.File, error) {
 }
 
 func (b *binaryFileSystem) Exists(prefix string, filepath string) bool {
-
 	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
 		if _, err := b.fs.Open(p); err != nil {
 			return false
@@ -47,5 +47,7 @@ func main() {
 		c.String(200, "test")
 	})
 	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }
