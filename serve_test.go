@@ -1,6 +1,7 @@
 package static
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -13,8 +14,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+<<<<<<< HEAD:serve_test.go
 func PerformRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
+=======
+// nolint:unparam
+func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
+	req, _ := http.NewRequestWithContext(context.Background(), method, path, nil)
+>>>>>>> 7756450 (chore(lint): add golang lint config):static_test.go
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
@@ -36,13 +43,13 @@ func TestEmptyDirectory(t *testing.T) {
 	router := gin.New()
 	router.Use(ServeRoot("/", dir))
 	router.GET("/", func(c *gin.Context) {
-		c.String(200, "index")
+		c.String(http.StatusOK, "index")
 	})
 	router.GET("/a", func(c *gin.Context) {
-		c.String(200, "a")
+		c.String(http.StatusOK, "a")
 	})
 	router.GET("/"+filename, func(c *gin.Context) {
-		c.String(200, "this is not printed")
+		c.String(http.StatusOK, "this is not printed")
 	})
 	w := PerformRequest(router, "GET", "/")
 	assert.Equal(t, w.Code, 200)
@@ -62,7 +69,7 @@ func TestEmptyDirectory(t *testing.T) {
 	router2 := gin.New()
 	router2.Use(ServeRoot("/static", dir))
 	router2.GET("/"+filename, func(c *gin.Context) {
-		c.String(200, "this is printed")
+		c.String(http.StatusOK, "this is printed")
 	})
 
 	w = PerformRequest(router2, "GET", "/")
@@ -71,7 +78,7 @@ func TestEmptyDirectory(t *testing.T) {
 	w = PerformRequest(router2, "GET", "/static")
 	assert.Equal(t, w.Code, 404)
 	router2.GET("/static", func(c *gin.Context) {
-		c.String(200, "index")
+		c.String(http.StatusOK, "index")
 	})
 
 	w = PerformRequest(router2, "GET", "/static")
