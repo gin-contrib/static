@@ -25,7 +25,7 @@ import "github.com/gin-contrib/static"
 
 ### Canonical example
 
-See the [example](example)
+See the [example](_example)
 
 ```go
 package main
