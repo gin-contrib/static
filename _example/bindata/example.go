@@ -38,7 +38,6 @@ func BinaryFileSystem(root string) *binaryFileSystem {
 // Usage
 // $ go-bindata data/
 // $ go build && ./bindata
-//
 func main() {
 	r := gin.Default()
 
