@@ -1,4 +1,2 @@
 coverage.out
-dump.rdb
-*/vendor/*
-!*/vendor/vendor.json
+coverage.html
