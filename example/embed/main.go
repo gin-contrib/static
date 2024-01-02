@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-contrib/static"
@@ -15,7 +16,12 @@ var EmbedFS embed.FS
 func main() {
 	r := gin.Default()
 
-	r.Use(static.Serve("/", static.EmbedFolder(EmbedFS, "public/page")))
+	staticFiles, err := static.EmbedFolder(EmbedFS, "public/page")
+	if err != nil {
+		log.Fatalln("initialization of embed folder failed:", err)
+	} else {
+		r.Use(static.Serve("/", staticFiles))
+	}
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(200, "test")

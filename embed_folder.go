@@ -3,8 +3,8 @@ package static
 import (
 	"embed"
 	"io/fs"
-	"log"
 	"net/http"
+	"os"
 )
 
 type embedFileSystem struct {
@@ -16,12 +16,13 @@ func (e embedFileSystem) Exists(prefix string, path string) bool {
 	return err == nil
 }
 
-func EmbedFolder(fsEmbed embed.FS, targetPath string) ServeFileSystem {
-	fsys, err := fs.Sub(fsEmbed, targetPath)
+func EmbedFolder(fsEmbed embed.FS, targetPath string) (ServeFileSystem, error) {
+	fsys, _ := fs.Sub(fsEmbed, targetPath)
+	_, err := os.Stat(targetPath)
 	if err != nil {
-		log.Fatalf("static.EmbedFolder - Invalid targetPath value - %s", err)
+		return nil, err
 	}
 	return embedFileSystem{
 		FileSystem: http.FS(fsys),
-	}
+	}, nil
 }

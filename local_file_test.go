@@ -1,10 +1,11 @@
-package static
+package static_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,7 +23,7 @@ func TestLocalFile(t *testing.T) {
 
 	dir, filename := filepath.Split(f.Name())
 	router := gin.New()
-	router.Use(Serve("/", LocalFile(dir, true)))
+	router.Use(static.Serve("/", static.LocalFile(dir, true)))
 
 	w := PerformRequest(router, "GET", "/"+filename)
 	assert.Equal(t, w.Code, 200)

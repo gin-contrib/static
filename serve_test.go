@@ -1,4 +1,4 @@
-package static
+package static_test
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,7 +36,7 @@ func TestEmptyDirectory(t *testing.T) {
 	dir, filename := filepath.Split(f.Name())
 
 	router := gin.New()
-	router.Use(ServeRoot("/", dir))
+	router.Use(static.ServeRoot("/", dir))
 	router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "index")
 	})
@@ -61,7 +62,7 @@ func TestEmptyDirectory(t *testing.T) {
 	assert.Equal(t, w.Body.String(), "a")
 
 	router2 := gin.New()
-	router2.Use(ServeRoot("/static", dir))
+	router2.Use(static.ServeRoot("/static", dir))
 	router2.GET("/"+filename, func(c *gin.Context) {
 		c.String(http.StatusOK, "this is printed")
 	})
@@ -101,7 +102,7 @@ func TestIndex(t *testing.T) {
 	dir, filename := filepath.Split(f.Name())
 
 	router := gin.New()
-	router.Use(ServeRoot("/", dir))
+	router.Use(static.ServeRoot("/", dir))
 
 	w := PerformRequest(router, "GET", "/"+filename)
 	assert.Equal(t, w.Code, 301)
@@ -124,7 +125,7 @@ func TestListIndex(t *testing.T) {
 
 	dir, filename := filepath.Split(f.Name())
 	router := gin.New()
-	router.Use(Serve("/", LocalFile(dir, true)))
+	router.Use(static.Serve("/", static.LocalFile(dir, true)))
 
 	w := PerformRequest(router, "GET", "/"+filename)
 	assert.Equal(t, w.Code, http.StatusOK)
