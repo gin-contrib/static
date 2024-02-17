@@ -14,14 +14,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-<<<<<<< HEAD:serve_test.go
+//nolint:unparam
 func PerformRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(method, path, nil)
-=======
-// nolint:unparam
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequestWithContext(context.Background(), method, path, nil)
->>>>>>> 7756450 (chore(lint): add golang lint config):static_test.go
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
