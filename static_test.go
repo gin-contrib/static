@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// nolint:unparam
+//nolint:unparam
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequestWithContext(context.Background(), method, path, nil)
 	w := httptest.NewRecorder()
