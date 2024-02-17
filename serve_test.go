@@ -2,7 +2,6 @@ package static
 
 import (
 	"context"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -23,9 +22,8 @@ func PerformRequest(r http.Handler, method, path string) *httptest.ResponseRecor
 }
 
 func TestEmptyDirectory(t *testing.T) {
-	// SETUP file
 	testRoot, _ := os.Getwd()
-	f, err := ioutil.TempFile(testRoot, "")
+	f, err := os.CreateTemp(testRoot, "")
 	if err != nil {
 		t.Error(err)
 	}
