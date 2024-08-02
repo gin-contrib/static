@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type embedFileSystem struct {
@@ -12,7 +13,7 @@ type embedFileSystem struct {
 }
 
 func (e embedFileSystem) Exists(prefix string, path string) bool {
-	_, err := e.Open(path)
+	_, err := e.Open(strings.TrimPrefix(path, prefix))
 	return err == nil
 }
 
