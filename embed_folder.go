@@ -3,7 +3,7 @@ package static
 import (
 	"embed"
 	"io/fs"
-	"log"
+	"log/slog"
 	"net/http"
 )
 
@@ -19,7 +19,11 @@ func (e embedFileSystem) Exists(prefix string, path string) bool {
 func EmbedFolder(fsEmbed embed.FS, targetPath string) ServeFileSystem {
 	fsys, err := fs.Sub(fsEmbed, targetPath)
 	if err != nil {
-		log.Fatalf("static.EmbedFolder - Invalid targetPath value - %s", err)
+		slog.Error("Failed to embed folder",
+			"targetPath", targetPath,
+			"error", err,
+		)
+		return nil
 	}
 	return embedFileSystem{
 		FileSystem: http.FS(fsys),
