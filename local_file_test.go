@@ -1,7 +1,6 @@
 package static
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,9 +12,9 @@ import (
 func TestLocalFile(t *testing.T) {
 	// SETUP file
 	testRoot, _ := os.Getwd()
-	f, err := ioutil.TempFile(testRoot, "")
+	f, err := os.CreateTemp(testRoot, "")
 	if err != nil {
-		t.Error(err)
+		t.Fatalf("Failed to create temp file: %v", err)
 	}
 	defer os.Remove(f.Name())
 	_, err = f.WriteString("Gin Web Framework")
