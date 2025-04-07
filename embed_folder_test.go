@@ -12,6 +12,7 @@ import (
 //go:embed test/data/server
 var server embed.FS
 
+// embedTests 定義了一組測試用例，用於測試嵌入文件系統的行為。
 var embedTests = []struct {
 	targetURL string // input
 	httpCode  int    // expected http code
@@ -24,9 +25,14 @@ var embedTests = []struct {
 	{"/static.html", 200, "<h1>Hello Gin Static</h1>", "Other file"},
 }
 
+// TestEmbedFolder 測試 EmbedFolder 函數的行為，確保其能夠正確嵌入文件夾並提供靜態文件服務。
 func TestEmbedFolder(t *testing.T) {
 	router := gin.New()
-	router.Use(Serve("/", EmbedFolder(server, "test/data/server")))
+	fs, err := EmbedFolder(server, "test/data/server")
+	if err != nil {
+		t.Fatalf("Failed to embed folder: %v", err)
+	}
+	router.Use(Serve("/", fs))
 	router.NoRoute(func(c *gin.Context) {
 		fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
 		c.Redirect(301, "/")
