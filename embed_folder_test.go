@@ -12,12 +12,12 @@ import (
 //go:embed test/data/server
 var server embed.FS
 
-// embedTests 定義了一組測試用例，用於測試嵌入文件系統的行為。
+// embedTests defines a set of test cases for testing the behavior of the embedded file system.
 var embedTests = []struct {
-	targetURL string // input
-	httpCode  int    // expected http code
-	httpBody  string // expected http body
-	name      string // test name
+	targetURL string // input URL
+	httpCode  int    // expected HTTP status code
+	httpBody  string // expected HTTP response body
+	name      string // name of the test case
 }{
 	{"/404.html", 301, "<a href=\"/\">Moved Permanently</a>.\n\n", "Unknown file"},
 	{"/", 200, "<h1>Hello Embed</h1>", "Root"},
@@ -25,22 +25,43 @@ var embedTests = []struct {
 	{"/static.html", 200, "<h1>Hello Gin Static</h1>", "Other file"},
 }
 
-// TestEmbedFolder 測試 EmbedFolder 函數的行為，確保其能夠正確嵌入文件夾並提供靜態文件服務。
+// TestEmbedFolder tests the behavior of the embedded file system, ensuring correct handling of static files and directories.
 func TestEmbedFolder(t *testing.T) {
-	router := gin.New()
-	fs, err := EmbedFolder(server, "test/data/server")
-	if err != nil {
-		t.Fatalf("Failed to embed folder: %v", err)
-	}
-	router.Use(Serve("/", fs))
-	router.NoRoute(func(c *gin.Context) {
-		fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
-		c.Redirect(301, "/")
+	t.Run("EmbedFolder", func(t *testing.T) {
+		router := gin.New()
+		fs, err := EmbedFolder(server, "test/data/server")
+		if err != nil {
+			t.Fatalf("Failed to embed folder: %v", err)
+		}
+		router.Use(Serve("/", fs))
+		router.NoRoute(func(c *gin.Context) {
+			fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
+			c.Redirect(301, "/")
+		})
+
+		for _, tt := range embedTests {
+			w := PerformRequest(router, "GET", tt.targetURL)
+			assert.Equal(t, tt.httpCode, w.Code, tt.name)
+			assert.Equal(t, tt.httpBody, w.Body.String(), tt.name)
+		}
 	})
 
-	for _, tt := range embedTests {
-		w := PerformRequest(router, "GET", tt.targetURL)
-		assert.Equal(t, tt.httpCode, w.Code, tt.name)
-		assert.Equal(t, tt.httpBody, w.Body.String(), tt.name)
-	}
+	t.Run("EmbedFolder with prefix", func(t *testing.T) {
+		router := gin.New()
+		fs, err := EmbedFolder(server, "test/data/server")
+		if err != nil {
+			t.Fatalf("Failed to embed folder: %v", err)
+		}
+		router.Use(Serve("/prefix", fs))
+		router.NoRoute(func(c *gin.Context) {
+			fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
+			c.Redirect(301, "/")
+		})
+
+		for _, tt := range embedTests {
+			w := PerformRequest(router, "GET", "/prefix"+tt.targetURL)
+			assert.Equal(t, tt.httpCode, w.Code, tt.name)
+			assert.Equal(t, tt.httpBody, w.Body.String(), tt.name)
+		}
+	})
 }
