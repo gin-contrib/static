@@ -14,7 +14,11 @@ var server embed.FS
 
 func main() {
 	r := gin.Default()
-	r.Use(static.Serve("/", static.EmbedFolder(server, "data/server")))
+	fs, err := static.EmbedFolder(server, "data/server")
+	if err != nil {
+		panic(err)
+	}
+	r.Use(static.Serve("/", fs))
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(200, "test")
 	})
