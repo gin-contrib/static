@@ -61,7 +61,45 @@ jobs:
         run: |
           go test -v -covermode=atomic -coverprofile=coverage.out
 
+      - name: Run Benchmarks
+        run: |
+          go test -bench=. -benchmem -run=^$ > benchmark_results.txt
+          cat benchmark_results.txt
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ matrix.os }}-go${{ matrix.go }}
+          path: benchmark_results.txt
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           flags: ${{ matrix.os }},go-${{ matrix.go }}
+
+  benchmark:
+    runs-on: ubuntu-latest
+    name: Performance Benchmarks
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Benchmarks
+        run: |
+          echo "Running performance benchmarks..."
+          go test -bench=. -benchmem -benchtime=10s -count=3 | tee benchmark_results.txt
+          echo ""
+          echo "Benchmark Results Summary:"
+          echo "=========================="
+          grep "^Benchmark" benchmark_results.txt | tail -3
+
+      - name: Upload detailed benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: detailed-benchmark-results
+          path: benchmark_results.txt
