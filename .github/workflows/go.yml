@@ -17,7 +17,7 @@ jobs:
         with:
           go-version: "^1.16"
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup golangci-lint
         uses: golangci/golangci-lint-action@v7
         with:
@@ -45,7 +45,7 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.ref }}
 
@@ -87,7 +87,7 @@ jobs:
           go-version: "1.25"
 
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Run Benchmarks
         run: |
