@@ -67,7 +67,7 @@ jobs:
           cat benchmark_results.txt
 
       - name: Upload benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: benchmark-results-${{ matrix.os }}-go${{ matrix.go }}
           path: benchmark_results.txt
@@ -99,7 +99,7 @@ jobs:
           grep "^Benchmark" benchmark_results.txt | tail -3
 
       - name: Upload detailed benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: detailed-benchmark-results
           path: benchmark_results.txt
