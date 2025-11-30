@@ -25,7 +25,7 @@ var embedTests = []struct {
 	{"/static.html", 200, "<h1>Hello Gin Static</h1>", "Other file"},
 }
 
-// TestEmbedFolder tests the behavior of the embedded file system, ensuring correct handling of static files and directories.
+// TestEmbedFolder tests the embedded file system handling of static files and directories.
 func TestEmbedFolder(t *testing.T) {
 	t.Run("EmbedFolder", func(t *testing.T) {
 		router := gin.New()

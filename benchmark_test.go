@@ -15,9 +15,15 @@ func BenchmarkLocalFileExists(b *testing.B) {
 	defer os.RemoveAll(tempDir)
 
 	// Create some test files and directories
-	os.WriteFile(filepath.Join(tempDir, "test.txt"), []byte("test"), 0o644)
-	os.Mkdir(filepath.Join(tempDir, "testdir"), 0o755)
-	os.WriteFile(filepath.Join(tempDir, "testdir", "index.html"), []byte("index"), 0o644)
+	if err := os.WriteFile(filepath.Join(tempDir, "test.txt"), []byte("test"), 0o600); err != nil {
+		b.Fatal(err)
+	}
+	if err := os.Mkdir(filepath.Join(tempDir, "testdir"), 0o755); err != nil {
+		b.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(tempDir, "testdir", "index.html"), []byte("index"), 0o600); err != nil {
+		b.Fatal(err)
+	}
 
 	fs := LocalFile(tempDir, false)
 
