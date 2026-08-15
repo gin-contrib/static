@@ -3,7 +3,7 @@
 [![Run Tests](https://github.com/gin-contrib/static/actions/workflows/go.yml/badge.svg)](https://github.com/gin-contrib/static/actions/workflows/go.yml)
 [![Trivy Security Scan](https://github.com/gin-contrib/static/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/gin-contrib/static/actions/workflows/trivy-scan.yml)
 [![codecov](https://codecov.io/gh/gin-contrib/static/branch/master/graph/badge.svg)](https://codecov.io/gh/gin-contrib/static)
-[![GoDoc](https://godoc.org/github.com/gin-contrib/static?status.svg)](https://godoc.org/github.com/gin-contrib/static)
+[![Go Reference](https://pkg.go.dev/badge/github.com/gin-contrib/static.svg)](https://pkg.go.dev/github.com/gin-contrib/static)
 
 Static middleware
 
