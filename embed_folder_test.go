@@ -2,7 +2,7 @@ package static
 
 import (
 	"embed"
-	"fmt"
+	"log"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -35,7 +35,7 @@ func TestEmbedFolder(t *testing.T) {
 		}
 		router.Use(Serve("/", fs))
 		router.NoRoute(func(c *gin.Context) {
-			fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
+			log.Printf("%s doesn't exists, redirect on /", c.Request.URL.Path)
 			c.Redirect(301, "/")
 		})
 
@@ -54,7 +54,7 @@ func TestEmbedFolder(t *testing.T) {
 		}
 		router.Use(Serve("/prefix", fs))
 		router.NoRoute(func(c *gin.Context) {
-			fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
+			log.Printf("%s doesn't exists, redirect on /", c.Request.URL.Path)
 			c.Redirect(301, "/")
 		})
 

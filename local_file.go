@@ -17,6 +17,7 @@ type localFileSystem struct {
 	indexes bool
 }
 
+//nolint:revive // exported func returns unexported type; kept for API compatibility
 func LocalFile(root string, indexes bool) *localFileSystem {
 	return &localFileSystem{
 		FileSystem: gin.Dir(root, indexes),
@@ -25,7 +26,7 @@ func LocalFile(root string, indexes bool) *localFileSystem {
 	}
 }
 
-func (l *localFileSystem) Exists(prefix string, path string) bool {
+func (l *localFileSystem) Exists(prefix, path string) bool {
 	// Check if path starts with prefix
 	p := strings.TrimPrefix(path, prefix)
 	if len(p) >= len(path) {

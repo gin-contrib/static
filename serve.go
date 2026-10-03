@@ -8,7 +8,7 @@ import (
 
 type ServeFileSystem interface {
 	http.FileSystem
-	Exists(prefix string, path string) bool
+	Exists(prefix, path string) bool
 }
 
 func ServeRoot(urlPrefix, root string) gin.HandlerFunc {
