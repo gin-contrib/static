@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-contrib/static"
+
+	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +19,7 @@ func (b *binaryFileSystem) Open(name string) (http.File, error) {
 	return b.fs.Open(name)
 }
 
-func (b *binaryFileSystem) Exists(prefix string, filepath string) bool {
+func (b *binaryFileSystem) Exists(prefix, filepath string) bool {
 	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
 		if _, err := b.fs.Open(p); err != nil {
 			return false

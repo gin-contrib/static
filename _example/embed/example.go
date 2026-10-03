@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-contrib/static"
+
 	"github.com/gin-gonic/gin"
 )
 

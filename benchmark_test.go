@@ -8,10 +8,7 @@ import (
 
 func BenchmarkLocalFileExists(b *testing.B) {
 	// Create a temporary directory structure for testing
-	tempDir, err := os.MkdirTemp("", "benchmark_test")
-	if err != nil {
-		b.Fatal(err)
-	}
+	tempDir := b.TempDir()
 	defer os.RemoveAll(tempDir)
 
 	// Create some test files and directories
@@ -21,7 +18,11 @@ func BenchmarkLocalFileExists(b *testing.B) {
 	if err := os.Mkdir(filepath.Join(tempDir, "testdir"), 0o755); err != nil {
 		b.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(tempDir, "testdir", "index.html"), []byte("index"), 0o600); err != nil {
+	if err := os.WriteFile(
+		filepath.Join(tempDir, "testdir", "index.html"),
+		[]byte("index"),
+		0o600,
+	); err != nil {
 		b.Fatal(err)
 	}
 

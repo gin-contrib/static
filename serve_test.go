@@ -44,19 +44,19 @@ func TestEmptyDirectory(t *testing.T) {
 		c.String(http.StatusOK, "this is not printed")
 	})
 	w := PerformRequest(router, "GET", "/")
-	assert.Equal(t, w.Code, 200)
-	assert.Equal(t, w.Body.String(), "index")
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "index", w.Body.String())
 
 	w = PerformRequest(router, "GET", "/"+filename)
-	assert.Equal(t, w.Code, 200)
-	assert.Equal(t, w.Body.String(), "Gin Web Framework")
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "Gin Web Framework", w.Body.String())
 
 	w = PerformRequest(router, "GET", "/"+filename+"a")
-	assert.Equal(t, w.Code, 404)
+	assert.Equal(t, 404, w.Code)
 
 	w = PerformRequest(router, "GET", "/a")
-	assert.Equal(t, w.Code, 200)
-	assert.Equal(t, w.Body.String(), "a")
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "a", w.Body.String())
 
 	router2 := gin.New()
 	router2.Use(ServeRoot("/static", dir))
@@ -65,24 +65,24 @@ func TestEmptyDirectory(t *testing.T) {
 	})
 
 	w = PerformRequest(router2, "GET", "/")
-	assert.Equal(t, w.Code, 404)
+	assert.Equal(t, 404, w.Code)
 
 	w = PerformRequest(router2, "GET", "/static")
-	assert.Equal(t, w.Code, 404)
+	assert.Equal(t, 404, w.Code)
 	router2.GET("/static", func(c *gin.Context) {
 		c.String(http.StatusOK, "index")
 	})
 
 	w = PerformRequest(router2, "GET", "/static")
-	assert.Equal(t, w.Code, 200)
+	assert.Equal(t, 200, w.Code)
 
 	w = PerformRequest(router2, "GET", "/"+filename)
-	assert.Equal(t, w.Code, 200)
-	assert.Equal(t, w.Body.String(), "this is printed")
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "this is printed", w.Body.String())
 
 	w = PerformRequest(router2, "GET", "/static/"+filename)
-	assert.Equal(t, w.Code, 200)
-	assert.Equal(t, w.Body.String(), "Gin Web Framework")
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "Gin Web Framework", w.Body.String())
 }
 
 func TestIndex(t *testing.T) {
@@ -102,9 +102,9 @@ func TestIndex(t *testing.T) {
 	router.Use(ServeRoot("/", dir))
 
 	w := PerformRequest(router, "GET", "/"+filename)
-	assert.Equal(t, w.Code, 301)
+	assert.Equal(t, 301, w.Code)
 
 	w = PerformRequest(router, "GET", "/")
-	assert.Equal(t, w.Code, 200)
-	assert.Equal(t, w.Body.String(), "index")
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "index", w.Body.String())
 }
