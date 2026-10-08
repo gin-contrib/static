@@ -27,11 +27,10 @@ func LocalFile(root string, indexes bool) *localFileSystem {
 }
 
 func (l *localFileSystem) Exists(prefix, path string) bool {
-	// Check if path starts with prefix
-	p := strings.TrimPrefix(path, prefix)
-	if len(p) >= len(path) {
+	if !strings.HasPrefix(path, prefix) {
 		return false
 	}
+	p := strings.TrimPrefix(path, prefix)
 
 	name := filepath.Join(l.root, p)
 	stats, err := os.Stat(name)
