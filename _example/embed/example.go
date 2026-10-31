@@ -2,7 +2,7 @@ package main
 
 import (
 	"embed"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-contrib/static"
@@ -24,9 +24,11 @@ func main() {
 		c.String(200, "test")
 	})
 	r.NoRoute(func(c *gin.Context) {
-		fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
+		log.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
 		c.Redirect(http.StatusMovedPermanently, "/")
 	})
 	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8080")
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal(err)
+	}
 }
