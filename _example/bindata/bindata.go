@@ -9,10 +9,10 @@ import (
 	"strings"
 )
 
-func bindata_read(data []byte, name string) ([]byte, error) {
+func bindataRead(data []byte, name string) ([]byte, error) {
 	gz, err := gzip.NewReader(bytes.NewBuffer(data))
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		return nil, fmt.Errorf("read %q: %v", name, err)
 	}
 
 	var buf bytes.Buffer
@@ -20,14 +20,14 @@ func bindata_read(data []byte, name string) ([]byte, error) {
 	gz.Close()
 
 	if err != nil {
-		return nil, fmt.Errorf("Read %q: %v", name, err)
+		return nil, fmt.Errorf("read %q: %v", name, err)
 	}
 
 	return buf.Bytes(), nil
 }
 
-func data_index_html() ([]byte, error) {
-	return bindata_read([]byte{
+func dataIndexHTML() ([]byte, error) {
+	return bindataRead([]byte{
 		0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x00, 0xff, 0x44, 0xce,
 		0xbd, 0xae, 0xc2, 0x30, 0x0c, 0x05, 0xe0, 0xbd, 0x4f, 0xe1, 0x9b, 0xbd,
 		0xaa, 0xba, 0xdd, 0x21, 0xcd, 0xc2, 0xef, 0x06, 0x43, 0x19, 0x18, 0x5d,
@@ -51,7 +51,7 @@ func data_index_html() ([]byte, error) {
 // It returns an error if the asset could not be found or
 // could not be loaded.
 func Asset(name string) ([]byte, error) {
-	cannonicalName := strings.Replace(name, "\\", "/", -1)
+	cannonicalName := strings.ReplaceAll(name, "\\", "/")
 	if f, ok := _bindata[cannonicalName]; ok {
 		return f()
 	}
@@ -69,7 +69,7 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() ([]byte, error){
-	"data/index.html": data_index_html,
+	"data/index.html": dataIndexHTML,
 }
 
 // AssetDir returns the file names below a certain
@@ -87,7 +87,7 @@ var _bindata = map[string]func() ([]byte, error){
 // AssetDir("data/img") would return []string{"a.png", "b.png"}
 // AssetDir("foo.txt") and AssetDir("notexist") would return an error
 func AssetDir(name string) ([]string, error) {
-	cannonicalName := strings.Replace(name, "\\", "/", -1)
+	cannonicalName := strings.ReplaceAll(name, "\\", "/")
 	pathList := strings.Split(cannonicalName, "/")
 	node := _bintree
 	for _, p := range pathList {
@@ -106,14 +106,14 @@ func AssetDir(name string) ([]string, error) {
 	return rv, nil
 }
 
-type _bintree_t struct {
+type bindataTree struct {
 	Func     func() ([]byte, error)
-	Children map[string]*_bintree_t
+	Children map[string]*bindataTree
 }
 
-var _bintree = &_bintree_t{nil, map[string]*_bintree_t{
-	"data": {nil, map[string]*_bintree_t{
-		"index.html": {data_index_html, map[string]*_bintree_t{}},
+var _bintree = &bindataTree{nil, map[string]*bindataTree{
+	"data": {nil, map[string]*bindataTree{
+		"index.html": {dataIndexHTML, map[string]*bindataTree{}},
 	}},
 }}
 
