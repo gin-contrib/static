@@ -1,6 +1,6 @@
 # static middleware
 
-[![Run Tests](https://github.com/gin-contrib/static/actions/workflows/go.yml/badge.svg)](https://github.com/gin-contrib/static/actions/workflows/go.yml)
+[![Lint and Testing](https://github.com/gin-contrib/static/actions/workflows/testing.yml/badge.svg)](https://github.com/gin-contrib/static/actions/workflows/testing.yml)
 [![Trivy Security Scan](https://github.com/gin-contrib/static/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/gin-contrib/static/actions/workflows/trivy-scan.yml)
 [![codecov](https://codecov.io/gh/gin-contrib/static/branch/master/graph/badge.svg)](https://codecov.io/gh/gin-contrib/static)
 [![Go Reference](https://pkg.go.dev/badge/github.com/gin-contrib/static.svg)](https://pkg.go.dev/github.com/gin-contrib/static)
