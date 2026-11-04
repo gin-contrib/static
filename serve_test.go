@@ -1,7 +1,6 @@
 package static
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -13,8 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func PerformRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequestWithContext(context.Background(), method, path, nil)
+func PerformRequest(t testing.TB, r http.Handler, method, path string) *httptest.ResponseRecorder {
+	req, _ := http.NewRequestWithContext(t.Context(), method, path, nil)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
@@ -43,18 +42,18 @@ func TestEmptyDirectory(t *testing.T) {
 	router.GET("/"+filename, func(c *gin.Context) {
 		c.String(http.StatusOK, "this is not printed")
 	})
-	w := PerformRequest(router, "GET", "/")
+	w := PerformRequest(t, router, "GET", "/")
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "index", w.Body.String())
 
-	w = PerformRequest(router, "GET", "/"+filename)
+	w = PerformRequest(t, router, "GET", "/"+filename)
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "Gin Web Framework", w.Body.String())
 
-	w = PerformRequest(router, "GET", "/"+filename+"a")
+	w = PerformRequest(t, router, "GET", "/"+filename+"a")
 	assert.Equal(t, 404, w.Code)
 
-	w = PerformRequest(router, "GET", "/a")
+	w = PerformRequest(t, router, "GET", "/a")
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "a", w.Body.String())
 
@@ -64,23 +63,23 @@ func TestEmptyDirectory(t *testing.T) {
 		c.String(http.StatusOK, "this is printed")
 	})
 
-	w = PerformRequest(router2, "GET", "/")
+	w = PerformRequest(t, router2, "GET", "/")
 	assert.Equal(t, 404, w.Code)
 
-	w = PerformRequest(router2, "GET", "/static")
+	w = PerformRequest(t, router2, "GET", "/static")
 	assert.Equal(t, 404, w.Code)
 	router2.GET("/static", func(c *gin.Context) {
 		c.String(http.StatusOK, "index")
 	})
 
-	w = PerformRequest(router2, "GET", "/static")
+	w = PerformRequest(t, router2, "GET", "/static")
 	assert.Equal(t, 200, w.Code)
 
-	w = PerformRequest(router2, "GET", "/"+filename)
+	w = PerformRequest(t, router2, "GET", "/"+filename)
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "this is printed", w.Body.String())
 
-	w = PerformRequest(router2, "GET", "/static/"+filename)
+	w = PerformRequest(t, router2, "GET", "/static/"+filename)
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "Gin Web Framework", w.Body.String())
 }
@@ -101,10 +100,10 @@ func TestIndex(t *testing.T) {
 	router := gin.New()
 	router.Use(ServeRoot("/", dir))
 
-	w := PerformRequest(router, "GET", "/"+filename)
+	w := PerformRequest(t, router, "GET", "/"+filename)
 	assert.Equal(t, 301, w.Code)
 
-	w = PerformRequest(router, "GET", "/")
+	w = PerformRequest(t, router, "GET", "/")
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "index", w.Body.String())
 }

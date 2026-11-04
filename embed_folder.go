@@ -17,7 +17,7 @@ type embedFileSystem struct {
 // Exists method checks if the given file path exists in the embedded file system.
 // If the path exists, it returns true; otherwise, it returns false.
 func (e embedFileSystem) Exists(prefix, path string) bool {
-	if len(prefix) > 1 && strings.HasPrefix(path, prefix) {
+	if len(prefix) > 1 {
 		path = strings.TrimPrefix(path, prefix)
 	}
 

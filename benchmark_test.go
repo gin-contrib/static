@@ -28,25 +28,23 @@ func BenchmarkLocalFileExists(b *testing.B) {
 
 	fs := LocalFile(tempDir, false)
 
-	b.ResetTimer()
-
 	// Benchmark file existence check
 	b.Run("FileExists", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
+		for b.Loop() {
 			fs.Exists("", "/test.txt")
 		}
 	})
 
 	// Benchmark directory with index check
 	b.Run("DirectoryWithIndex", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
+		for b.Loop() {
 			fs.Exists("", "/testdir")
 		}
 	})
 
 	// Benchmark non-existent file
 	b.Run("NonExistent", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
+		for b.Loop() {
 			fs.Exists("", "/nonexistent.txt")
 		}
 	})

@@ -27,10 +27,10 @@ func TestLocalFile(t *testing.T) {
 	router := gin.New()
 	router.Use(Serve("/", LocalFile(dir, true)))
 
-	w := PerformRequest(router, "GET", "/"+filename)
+	w := PerformRequest(t, router, "GET", "/"+filename)
 	assert.Equal(t, 200, w.Code)
 	assert.Equal(t, "Gin Web Framework", w.Body.String())
 
-	w = PerformRequest(router, "GET", "/")
+	w = PerformRequest(t, router, "GET", "/")
 	assert.Contains(t, w.Body.String(), `<a href="`+filename)
 }

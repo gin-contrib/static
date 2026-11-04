@@ -40,7 +40,7 @@ func TestEmbedFolder(t *testing.T) {
 		})
 
 		for _, tt := range embedTests {
-			w := PerformRequest(router, "GET", tt.targetURL)
+			w := PerformRequest(t, router, "GET", tt.targetURL)
 			assert.Equal(t, tt.httpCode, w.Code, tt.name)
 			assert.Equal(t, tt.httpBody, w.Body.String(), tt.name)
 		}
@@ -59,7 +59,7 @@ func TestEmbedFolder(t *testing.T) {
 		})
 
 		for _, tt := range embedTests {
-			w := PerformRequest(router, "GET", "/prefix"+tt.targetURL)
+			w := PerformRequest(t, router, "GET", "/prefix"+tt.targetURL)
 			assert.Equal(t, tt.httpCode, w.Code, tt.name)
 			assert.Equal(t, tt.httpBody, w.Body.String(), tt.name)
 		}
