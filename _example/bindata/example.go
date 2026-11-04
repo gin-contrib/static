@@ -20,7 +20,7 @@ func (b *binaryFileSystem) Open(name string) (http.File, error) {
 }
 
 func (b *binaryFileSystem) Exists(prefix, filepath string) bool {
-	if p := strings.TrimPrefix(filepath, prefix); len(p) < len(filepath) {
+	if p, found := strings.CutPrefix(filepath, prefix); found && prefix != "" {
 		if _, err := b.fs.Open(p); err != nil {
 			return false
 		}
